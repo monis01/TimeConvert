@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimeConvert.io - Timestamp Converter & Calculator</title>
+    <meta name="description" content="Convert timestamps between UNIX/epoch, ISO, and more. Perfect for developers, QA, and teams working with database timestamps.">
+    <meta property="og:title" content="TimeConvert.io - Timestamp Converter & Calculator">
+    <meta property="og:description" content="Convert timestamps between UNIX/epoch, ISO, and more. Perfect for developers, QA, and teams working with database timestamps.">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⏱️</text></svg>">
+    <!-- Updated date-fns CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/4.1.0/cdn.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#EBF5FF',
+                            100: '#E1EFFE',
+                            200: '#C3DDFD',
+                            300: '#A4CAFE',
+                            400: '#76A9FA',
+                            500: '#3F83F8',
+                            600: '#1C64F2',
+                            700: '#1A56DB',
+                            800: '#1E429F',
+                            900: '#233876',
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 240px;
+            background-color: #555;
+            color: #fff;
+            text-align: left;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.75rem;
+            line-height: 1.1rem;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Dark mode tooltip adjustments */
+        .dark .tooltip .tooltiptext {
+            background-color: #222;
+            color: #fff;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+    <header class="bg-primary-600 text-white shadow-lg py-3">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold">TimeConvert.io</h1>
+            <div>
+                <button id="darkModeToggle" class="bg-primary-700 hover:bg-primary-800 text-white px-3 py-1 rounded-md" title="Toggle dark/light mode">
+                    <span id="darkModeIcon">🌙</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <main class="container mx-auto px-4 py-6 flex-grow">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Timestamp Converter Section -->
+            <section class="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-md">
+                <h2 class="text-lg md:text-xl font-semibold mb-4 border-b pb-2 dark:border-gray-700">Timestamp Converter</h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label for="timestampInput" class="block text-sm font-medium mb-1">Enter Timestamp:</label>
+                        <div class="flex">
+                            <input 
+                                type="text" 
+                                id="timestampInput" 
+                                class="flex-grow px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700" 
+                                placeholder="UNIX, ISO 8601, RFC 2822, etc."
+                            >
+                            <button 
+                                id="nowButtonConverter" 
+                                class="bg-primary-500 hover:bg-primary-600 text-white px-3 py-2 rounded-r-md text-sm transition-colors"
+                            >Now</button>
+                        </div>
+                        <div id="formatHint" class="text-xs text-gray-500 dark:text-gray-400 mt-1 h-4"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Local Time:</label>
+                            <div class="flex">
+                                <input 
+                                    type="text" 
+                                    id="localTimeOutput" 
+                                    class="flex-grow px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700" 
+                                    readonly
+                                >
+                                <button 
+                                    data-clipboard-target="#localTimeOutput"
+                                    class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-3 py-2 rounded-r-md text-sm transition-colors"
+                                >📋</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">UTC Time:</label>
+                            <div class="flex">
+                                <input 
+                                    type="text" 
+                                    id="utcTimeOutput" 
+                                    class="flex-grow px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700" 
+                                    readonly
+                                >
+                                <button 
+                                    data-clipboard-target="#utcTimeOutput"
+                                    class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-3 py-2 rounded-r-md text-sm transition-colors"
+                                >📋</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timezone Conversion Section -->
+                    <div>
+                        <label class="block text-sm font-medium mb-1">
+                            <span class="tooltip">
+                                Convert to Timezone:
+                                <span class="tooltiptext">See the timestamp in a specific timezone</span>
+                            </span>
+                        </label>
+                        <div class="flex space-x-2">
+                            <select 
+                                id="timezoneSelect" 
+                                class="flex-grow px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700"
+                            >
+                                <option value="">Select timezone...</option>
+                                <optgroup label="Common">
+                                    <option value="UTC">UTC (Coordinated Universal Time)</option>
+                                    <option value="America/New_York">EST/EDT (Eastern US)</option>
+                                    <option value="America/Chicago">CST/CDT (Central US)</option>
+                                    <option value="America/Denver">MST/MDT (Mountain US)</option>
+                                    <option value="America/Los_Angeles">PST/PDT (Pacific US)</option>
+                                    <option value="Europe/London">GMT/BST (London)</option>
+                                    <option value="Europe/Paris">CET/CEST (Paris, Berlin)</option>
+                                    <option value="Asia/Tokyo">JST (Tokyo)</option>
+                                    <option value="Asia/Shanghai">CST (China)</option>
+                                    <option value="Asia/Kolkata">IST (India)</option>
+                                    <option value="Australia/Sydney">AEST/AEDT (Sydney)</option>
+                                </optgroup>
+                                <optgroup label="Africa">
+                                    <option value="Africa/Cairo">Cairo</option>
+                                    <option value="Africa/Johannesburg">Johannesburg</option>
+                                    <option value="Africa/Lagos">Lagos</option>
+                                </optgroup>
+                                <optgroup label="America">
+                                    <option value="America/Anchorage">Anchorage</option>
+                                    <option value="America/Sao_Paulo">São Paulo</option>
+                                    <option value="America/Mexico_City">Mexico City</option>
+                                    <option value="America/Toronto">Toronto</option>
+                                    <option value="America/Vancouver">Vancouver</option>
+                                </optgroup>
+                                <optgroup label="Asia">
+                                    <option value="Asia/Dubai">Dubai</option>
+                                    <option value="Asia/Hong_Kong">Hong Kong</option>
+                                    <option value="Asia/Jerusalem">Jerusalem</option>
+                                    <option value="Asia/Seoul">Seoul</option>
+                                    <option value="Asia/Singapore">Singapore</option>
+                                </optgroup>
+                                <optgroup label="Australia & Pacific">
+                                    <option value="Australia/Melbourne">Melbourne</option>
+                                    <option value="Australia/Perth">Perth</option>
+                                    <option value="Pacific/Auckland">Auckland</option>
+                                </optgroup>
+                                <optgroup label="Europe">
+                                    <option value="Europe/Amsterdam">Amsterdam</option>
+                                    <option value="Europe/Athens">Athens</option>
+                                    <option value="Europe/Berlin">Berlin</option>
+                                    <option value="Europe/Istanbul">Istanbul</option>
+                                    <option value="Europe/Moscow">Moscow</option>
+                                    <option value="Europe/Rome">Rome</option>
+                                    <option value="Europe/Stockholm">Stockholm</option>
+                                </optgroup>
+                            </select>
+                            <div class="flex">
+                                <input 
+                                    type="text" 
+                                    id="timezoneOutput" 
+                                    class="w-64 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700" 
+                                    readonly
+                                >
+                                <button 
+                                    data-clipboard-target="#timezoneOutput"
+                                    class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-3 py-2 rounded-r-md text-sm transition-colors"
+                                >📋</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium mb-1">Format Outputs:</label>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                            <div>
+                                <label class="block text-xs mb-1">
+                                    <span class="tooltip">
+                                        UNIX (s): 
+                                        <span class="tooltiptext">Unix timestamp in seconds since January 1, 1970 UTC (epoch time). Most common in databases.</span>
+                                    </span>
+                                </label>
+                                <div class="flex">
+                                    <input type="text" id="unixSecondsOutput" class="flex-grow px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700" readonly>
+                                    <button data-clipboard-target="#unixSecondsOutput" class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-2 py-1 rounded-r-md text-xs transition-colors">📋</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs mb-1">
+                                    <span class="tooltip">
+                                        UNIX (ms): 
+                                        <span class="tooltiptext">Unix timestamp in milliseconds since January 1, 1970 UTC. Often used in JavaScript.</span>
+                                    </span>
+                                </label>
+                                <div class="flex">
+                                    <input type="text" id="unixMillisOutput" class="flex-grow px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700" readonly>
+                                    <button data-clipboard-target="#unixMillisOutput" class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-2 py-1 rounded-r-md text-xs transition-colors">📋</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs mb-1">
+                                    <span class="tooltip">
+                                        ISO 8601: 
+                                        <span class="tooltiptext">International date/time format (yyyy-MM-ddTHH:mm:ss.sssZ). Standard for APIs and data interchange.</span>
+                                    </span>
+                                </label>
+                                <div class="flex">
+                                    <input type="text" id="isoOutput" class="flex-grow px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700" readonly>
+                                    <button data-clipboard-target="#isoOutput" class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-2 py-1 rounded-r-md text-xs transition-colors">📋</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs mb-1">
+                                    <span class="tooltip">
+                                        RFC 2822: 
+                                        <span class="tooltiptext">Internet email standard date format (e.g., "Tue, 01 May 2024 12:00:00 GMT"). Used in email systems.</span>
+                                    </span>
+                                </label>
+                                <div class="flex">
+                                    <input type="text" id="rfcOutput" class="flex-grow px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700" readonly>
+                                    <button data-clipboard-target="#rfcOutput" class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-2 py-1 rounded-r-md text-xs transition-colors">📋</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DB Timestamp Format Helpers -->
+                    <div>
+                        <label class="block text-sm font-medium mb-1">
+                            <span class="tooltip">
+                                Database Timestamp Formats:
+                                <span class="tooltiptext">Common timestamp formats used in different database systems</span>
+                            </span>
+                        </label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                            <div>
+                                <label class="block text-xs mb-1">
+                                    <span class="tooltip">
+                                        MySQL: 
+                                        <span class="tooltiptext">Standard MySQL datetime format (YYYY-MM-DD HH:MM:SS)</span>
+                                    </span>
+                                </label>
+                                <div class="flex">
+                                    <input type="text" id="mysqlOutput" class="flex-grow px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700" readonly>
+                                    <button data-clipboard-target="#mysqlOutput" class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-2 py-1 rounded-r-md text-xs transition-colors">📋</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs mb-1">
+                                    <span class="tooltip">
+                                        PostgreSQL: 
+                                        <span class="tooltiptext">PostgreSQL timestamp format (YYYY-MM-DD HH:MM:SS.mmm±TZ)</span>
+                                    </span>
+                                </label>
+                                <div class="flex">
+                                    <input type="text" id="postgresOutput" class="flex-grow px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700" readonly>
+                                    <button data-clipboard-target="#postgresOutput" class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-2 py-1 rounded-r-md text-xs transition-colors">📋</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs mb-1">
+                                    <span class="tooltip">
+                                        MongoDB: 
+                                        <span class="tooltiptext">MongoDB ISODate format</span>
+                                    </span>
+                                </label>
+                                <div class="flex">
+                                    <input type="text" id="mongoOutput" class="flex-grow px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700" readonly>
+                                    <button data-clipboard-target="#mongoOutput" class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-2 py-1 rounded-r-md text-xs transition-colors">📋</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Time Difference Calculator Section -->
+            <section class="bg-white dark:bg-gray-800 p-5 rounded-lg shadow-md">
+                <h2 class="text-lg md:text-xl font-semibold mb-4 border-b pb-2 dark:border-gray-700">Time Difference Calculator</h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label for="timestamp1" class="block text-sm font-medium mb-1">First Timestamp:</label>
+                        <div class="flex">
+                            <input 
+                                type="text" 
+                                id="timestamp1" 
+                                class="flex-grow px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700" 
+                                placeholder="UNIX, ISO 8601, RFC 2822, etc."
+                            >
+                            <button 
+                                id="nowButton1" 
+                                class="bg-primary-500 hover:bg-primary-600 text-white px-3 py-2 rounded-r-md text-sm transition-colors"
+                            >Now</button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center">
+                        <div class="flex-grow">
+                            <label for="timestamp2" class="block text-sm font-medium mb-1">Second Timestamp:</label>
+                            <div class="flex">
+                                <input 
+                                    type="text" 
+                                    id="timestamp2" 
+                                    class="flex-grow px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700" 
+                                    placeholder="UNIX, ISO 8601, RFC 2822, etc."
+                                >
+                                <button 
+                                    id="nowButton2" 
+                                    class="bg-primary-500 hover:bg-primary-600 text-white px-3 py-2 rounded-r-md text-sm transition-colors"
+                                >Now</button>
+                            </div>
+                        </div>
+                        <div class="ml-2 mt-4">
+                            <button 
+                                id="swapTimestamps" 
+                                class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 p-2 rounded-md text-sm transition-colors" 
+                                title="Swap timestamps"
+                            >↕️</button>
+                        </div>
+                    </div>
+                    <div id="timestampOrderWarning" class="text-yellow-600 dark:text-yellow-400 text-xs hidden">
+                        Note: Second timestamp is earlier than first timestamp
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Difference (hh:mm:ss):</label>
+                            <div class="flex">
+                                <input 
+                                    type="text" 
+                                    id="timeDiffHMS" 
+                                    class="flex-grow px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700" 
+                                    readonly
+                                >
+                                <button 
+                                    data-clipboard-target="#timeDiffHMS"
+                                    class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-3 py-2 rounded-r-md text-sm transition-colors"
+                                >📋</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Difference (Xd Yh Zm Ss):</label>
+                            <div class="flex">
+                                <input 
+                                    type="text" 
+                                    id="timeDiffDHMS" 
+                                    class="flex-grow px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700" 
+                                    readonly
+                                >
+                                <button 
+                                    data-clipboard-target="#timeDiffDHMS"
+                                    class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-3 py-2 rounded-r-md text-sm transition-colors"
+                                >📋</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Human-readable:</label>
+                        <input 
+                            type="text" 
+                            id="timeDiffHuman" 
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700" 
+                            readonly
+                        >
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- AdSense Placeholder - Adjusted for better dimensions -->
+        <div class="mt-8 flex justify-center">
+            <div id="adsense-slot" class="p-4 bg-gray-200 dark:bg-gray-700 rounded-md text-center w-full max-w-2xl h-24">
+                Ad goes here
+            </div>
+        </div>
+
+        <!-- FAQ Section for SEO -->
+        <section class="mt-8 bg-white dark:bg-gray-800 p-5 rounded-lg shadow-md">
+            <h2 class="text-lg md:text-xl font-semibold mb-4 border-b pb-2 dark:border-gray-700">Frequently Asked Questions</h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <h3 class="font-medium">What is a UNIX timestamp?</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">A UNIX timestamp (or epoch time) represents the number of seconds that have elapsed since January 1, 1970 (UTC). It's widely used in many database systems and programming languages because it's a simple, language-independent way to track time.</p>
+                </div>
+                
+                <div>
+                    <h3 class="font-medium">How do I convert a database timestamp to a readable format?</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Simply paste your database timestamp (like 1714075386) into the "Enter Timestamp" field. Our tool will automatically detect the format and show you the converted human-readable time in both your local timezone and UTC.</p>
+                </div>
+                
+                <div>
+                    <h3 class="font-medium">Why are timestamps useful for developers and QA teams?</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Timestamps provide a precise way to record when events occur in your applications. When debugging issues or verifying data, it's often necessary to convert these timestamps to human-readable formats. This tool helps teams quickly understand when something happened without manual conversion.</p>
+                </div>
+                
+                <div>
+                    <h3 class="font-medium">What's the difference between UNIX seconds and milliseconds?</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">UNIX seconds represent the number of seconds since epoch (Jan 1, 1970), while milliseconds represent the same but with 1000x more precision. JavaScript's Date.now() returns milliseconds (13 digits), while many databases store seconds (10 digits).</p>
+                </div>
+                
+                <div>
+                    <h3 class="font-medium">How do database systems store timestamps?</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Different databases use different formats. MySQL typically uses a DATETIME format (YYYY-MM-DD HH:MM:SS), PostgreSQL uses a timestamp with time zone format, and MongoDB uses ISODate objects. Our tool helps convert between these formats for easier cross-database work.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Conversions -->
+        <section class="mt-8 bg-white dark:bg-gray-800 p-5 rounded-lg shadow-md">
+            <div class="flex justify-between items-center mb-4 border-b pb-2 dark:border-gray-700">
+                <h2 class="text-lg md:text-xl font-semibold">Recent Conversions</h2>
+                <div class="flex space-x-2">
+                    <a href="https://github.com/timeconvertio/timeconvert/issues/new" target="_blank" class="text-xs px-2 py-1 bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-200 rounded hover:bg-primary-200 dark:hover:bg-primary-800 transition-colors">Report Issue</a>
+                    <button id="clearHistory" class="text-xs px-2 py-1 bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-200 rounded hover:bg-red-200 dark:hover:bg-red-800 transition-colors">Clear History</button>
+                </div>
+            </div>
+            <div id="recentConversions" class="space-y-2 max-h-40 overflow-y-auto">
+                <!-- Recent conversions will be populated here -->
+                <div class="text-sm text-gray-500 dark:text-gray-400 italic tooltip">
+                    No recent conversions yet
+                    <span class="tooltiptext">Conversions you make will appear here for quick access later</span>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 py-4 border-t dark:border-gray-700">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-sm">
+            <div>&copy; 2025 TimeConvert.io</div>
+            <div class="mt-2 md:mt-0">
+                <a href="#about" class="hover:text-primary-600 dark:hover:text-primary-400 mr-4" id="aboutLink">About</a>
+                <a href="#privacy" class="hover:text-primary-600 dark:hover:text-primary-400 mr-4" id="privacyLink">Privacy</a>
+                <a href="#terms" class="hover:text-primary-600 dark:hover:text-primary-400" id="termsLink">Terms</a>
+            </div>
+        </div>
+
+        <!-- Modal for About/Privacy/Terms -->
+        <div id="infoModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 id="modalTitle" class="text-lg font-semibold"></h3>
+                    <button id="closeModal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                        &times;
+                    </button>
+                </div>
+                <div id="modalContent" class="prose dark:prose-invert prose-sm max-w-none"></div>
+            </div>
+        </div>
+    </footer>
+    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7149099440353877"
+        crossorigin="anonymous"></script>
+   
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7149099440353877" data-ad-slot="3021347174"
+        data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+    </script> -->
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7149099440353877"
+    crossorigin="anonymous"></script>
+    <script src="./main.js"></script>
+</body>
+</html>
