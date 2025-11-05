@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>TimeConvert.io - Free Timestamp Converter & Calculator Tool</title>
+    <meta name="title" content="TimeConvert.io - Free Timestamp Converter & Calculator Tool">
+    <meta name="description" content="Free online timestamp converter tool for developers. Convert UNIX/epoch timestamps to ISO 8601, RFC 2822, MySQL, PostgreSQL, MongoDB formats. Calculate time differences across timezones instantly.">
+    <meta name="keywords" content="timestamp converter, unix timestamp, epoch converter, timezone converter, ISO 8601, RFC 2822, MySQL datetime, PostgreSQL timestamp, MongoDB ISODate, time calculator, developer tools, timestamp to date">
+    <meta name="author" content="TimeConvert.io">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    <meta name="theme-color" content="#1C64F2">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://timeconvert.io/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://timeconvert.io/">
+    <meta property="og:title" content="TimeConvert.io - Free Timestamp Converter & Calculator Tool">
+    <meta property="og:description" content="Free online timestamp converter tool for developers. Convert UNIX/epoch timestamps to ISO 8601, RFC 2822, MySQL, PostgreSQL, MongoDB formats instantly.">
+    <meta property="og:image" content="https://timeconvert.io/og-image.png">
+    <meta property="og:site_name" content="TimeConvert.io">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://timeconvert.io/">
+    <meta name="twitter:title" content="TimeConvert.io - Free Timestamp Converter & Calculator Tool">
+    <meta name="twitter:description" content="Free online timestamp converter tool for developers. Convert UNIX/epoch timestamps to ISO 8601, RFC 2822, and database formats instantly.">
+    <meta name="twitter:image" content="https://timeconvert.io/twitter-card.png">
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⏱️</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⏱️</text></svg>">
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "TimeConvert.io",
+      "url": "https://timeconvert.io",
+      "description": "Free online timestamp converter and calculator tool for developers. Convert between UNIX timestamps, ISO 8601, RFC 2822, and database formats.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "browserRequirements": "Requires JavaScript. Works with all modern browsers.",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "127"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "TimeConvert.io"
+      },
+      "featureList": [
+        "UNIX timestamp conversion",
+        "ISO 8601 format conversion",
+        "RFC 2822 format conversion",
+        "MySQL DATETIME format",
+        "PostgreSQL timestamp format",
+        "MongoDB ISODate format",
+        "Timezone conversion",
+        "Time difference calculator",
+        "Smart format detection",
+        "Offline functionality"
+      ]
+    }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/4.1.0/cdn.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#EBF5FF',
+                            100: '#E1EFFE',
+                            200: '#C3DDFD',
+                            300: '#A4CAFE',
+                            400: '#76A9FA',
+                            500: '#3F83F8',
+                            600: '#1C64F2',
+                            700: '#1A56DB',
+                            800: '#1E429F',
+                            900: '#233876',
+                        },
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Base font styling */
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        html {
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body, main, section, div {
+            max-width: 100%;
+        }
+
+        /* Improved heading readability with proper sizes */
+        h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            line-height: 1.3;
+        }
+
+        h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            line-height: 1.4;
+        }
+
+        h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        /* Monospace for timestamps and codes */
+        .font-mono,
+        input[readonly].font-mono,
+        input[type="text"][readonly] {
+            font-family: 'JetBrains Mono', Menlo, Monaco, 'Courier New', monospace;
+            font-size: 0.8125rem;
+            letter-spacing: -0.01em;
+        }
+
+        /* Database format fields - allow horizontal scroll for long values */
+        #mysqlOutput,
+        #postgresOutput,
+        #mongoOutput {
+            white-space: nowrap;
+            overflow-x: auto;
+            scrollbar-width: thin;
+        }
+
+        #mysqlOutput::-webkit-scrollbar,
+        #postgresOutput::-webkit-scrollbar,
+        #mongoOutput::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        /* Better input readability */
+        input, select, textarea {
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.875rem;
+        }
+
+        input::placeholder {
+            font-size: 0.8125rem;
+        }
+
+        /* Mobile-specific improvements */
+        @media (max-width: 640px) {
+            /* Shorter button text on mobile */
+            #nowButtonConverter::after,
+            #nowButton1::after,
+            #nowButton2::after {
+                content: "Now";
+            }
+
+            #nowButtonConverter,
+            #nowButton1,
+            #nowButton2 {
+                font-size: 0;
+                padding: 0.375rem 0.75rem;
+            }
+
+            #nowButtonConverter::after,
+            #nowButton1::after,
+            #nowButton2::after {
+                font-size: 0.75rem;
+                font-weight: 500;
+            }
+
+            /* Better mobile spacing */
+            body {
+                font-size: 13px;
+            }
+
+            /* Ensure inputs don't cause zoom on iOS */
+            input, select, textarea {
+                font-size: 16px !important;
+            }
+
+            input::placeholder {
+                font-size: 14px !important;
+            }
+
+            /* Adjust section padding */
+            section {
+                padding: 0.875rem !important;
+            }
+
+            /* Modal improvements for mobile */
+
+            /* Ensure modal and all children don't exceed viewport */
+            #infoModal * {
+                box-sizing: border-box !important;
+            }
+
+            #infoModal .prose {
+                font-size: 0.75rem !important;
+                line-height: 1.4;
+                max-width: 100% !important;
+            }
+
+            #infoModal h3,
+            #modalTitle {
+                font-size: 0.875rem !important;
+                overflow-wrap: break-word;
+                word-wrap: break-word;
+                line-height: 1.3;
+            }
+
+            /* Reduce header padding on mobile */
+            #infoModal .flex.justify-between {
+                padding-left: 0.5rem !important;
+                padding-right: 0.5rem !important;
+                padding-top: 0.5rem !important;
+                padding-bottom: 0.375rem !important;
+            }
+
+            /* Ensure modal content area has proper padding */
+            #infoModal .overflow-y-auto {
+                padding-left: 0.5rem !important;
+                padding-right: 0.5rem !important;
+                padding-bottom: 0.5rem !important;
+                overflow-x: hidden !important;
+            }
+
+            /* Ensure modal content wraps properly */
+            #modalContent {
+                padding-top: 0.5rem !important;
+                overflow-x: hidden !important;
+            }
+
+            #modalContent p,
+            #modalContent div,
+            #modalContent span,
+            #modalContent li,
+            #modalContent strong,
+            #modalContent a {
+                word-wrap: break-word !important;
+                overflow-wrap: break-word !important;
+                word-break: break-word !important;
+            }
+
+            /* Force all list items to wrap on mobile */
+            #infoModal ul,
+            #infoModal ol {
+                padding-right: 0.5rem !important;
+                margin-right: 0 !important;
+            }
+
+            #infoModal li {
+                padding-right: 0 !important;
+            }
+
+            #infoModal .feature-list li,
+            #infoModal .use-cases li {
+                padding-left: 1rem !important;
+                padding-right: 0 !important;
+            }
+
+            #infoModal .feature-list,
+            #infoModal .use-cases {
+                padding-left: 0 !important;
+                margin-left: 0 !important;
+            }
+
+            /* Adjust heading sizes in modal */
+            #infoModal h2 {
+                font-size: 0.875rem !important;
+            }
+
+            #infoModal h3 {
+                font-size: 0.8125rem !important;
+            }
+
+            #infoModal .about-content .intro {
+                font-size: 0.75rem !important;
+            }
+
+            /* Ensure warning boxes and highlights fit */
+            #infoModal .privacy-highlight,
+            #infoModal .cta-section,
+            #infoModal .highlight-box,
+            #infoModal .note,
+            #infoModal .contact-section {
+                padding: 0.5rem !important;
+                margin: 0.5rem 0 !important;
+            }
+
+            /* Make sure checkmarks and bullets don't cause overflow */
+            #infoModal .feature-list li::before,
+            #infoModal .use-cases li::before {
+                position: relative !important;
+                left: 0 !important;
+                margin-right: 0.25rem !important;
+            }
+
+            /* Better copy button spacing */
+            .copy-btn {
+                padding: 0.375rem !important;
+                min-width: 2rem !important;
+                font-size: 0.75rem;
+            }
+
+            /* Improve footer button layout on mobile */
+            footer .flex {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                justify-content: center;
+            }
+
+            /* Better touch targets for links and buttons */
+            a, button {
+                min-height: 44px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            /* Exception for modal close button and title */
+            #closeModal {
+                min-height: auto;
+                padding: 0.25rem 0.5rem !important;
+                line-height: 1 !important;
+            }
+
+            #modalTitle {
+                min-height: auto;
+                display: block;
+                max-width: calc(100% - 3rem) !important;
+            }
+
+            /* Better spacing for Recent Conversions section on mobile */
+            #recentConversions {
+                max-height: 200px;
+            }
+
+            /* Improve Recent Conversions buttons on mobile */
+            .use-timestamp {
+                white-space: nowrap;
+                font-size: 0.7rem !important;
+                padding: 0.375rem 0.5rem !important;
+            }
+
+            /* Make timestamp outputs fit better on mobile */
+            #isoOutput,
+            #rfcOutput,
+            #unixSecondsOutput,
+            #unixMillisOutput {
+                font-size: 0.7rem !important;
+                padding-left: 0.375rem !important;
+                padding-right: 0.375rem !important;
+            }
+
+            /* Container padding adjustment */
+            main.container {
+                padding-left: 0.75rem !important;
+                padding-right: 0.75rem !important;
+            }
+
+            /* Better input field heights for touch targets */
+            input[type="text"], select {
+                min-height: 44px;
+            }
+
+            /* Prevent text overflow in readonly fields */
+            input[readonly] {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            /* Adjust grid spacing on mobile */
+            .grid {
+                gap: 0.5rem !important;
+            }
+
+            /* Header adjustments */
+            header {
+                padding-top: 0.5rem !important;
+                padding-bottom: 0.5rem !important;
+            }
+
+            header h1 {
+                font-size: 1rem !important;
+            }
+        }
+
+        /* Button text should be clear */
+        button {
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            font-size: 0.8125rem;
+        }
+
+        /* Labels should be slightly bolder */
+        label {
+            font-weight: 500;
+            font-size: 0.8125rem;
+        }
+
+        /* Paragraph and body text */
+        p {
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        /* Small text like hints and tooltips */
+        .text-xs {
+            font-size: 0.75rem;
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+        }
+
+        /* Details summary text */
+        details summary {
+            font-size: 0.8125rem;
+        }
+
+        /* General modal overflow prevention */
+        #infoModal {
+            overflow-x: hidden;
+        }
+
+        #infoModal * {
+            box-sizing: border-box;
+        }
+
+
+        /* Modal styling improvements */
+        #infoModal .about-content .intro {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1.25rem;
+            color: #1f2937;
+            max-width: 100%;
+            overflow-wrap: break-word;
+        }
+
+        .dark #infoModal .about-content .intro {
+            color: #e5e7eb;
+        }
+
+        #infoModal h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #1e3a8a;
+        }
+
+        .dark #infoModal h3 {
+            color: #93c5fd;
+        }
+
+        #infoModal .feature-list,
+        #infoModal .use-cases {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        #infoModal .feature-list li,
+        #infoModal .use-cases li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        #infoModal .feature-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        #infoModal .use-cases li::before {
+            content: "•";
+            position: absolute;
+            left: 0.5rem;
+            color: #3b82f6;
+            font-weight: bold;
+        }
+
+        #infoModal .privacy-highlight {
+            background: #dbeafe;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid #3b82f6;
+            margin: 1rem 0;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+        .dark #infoModal .privacy-highlight {
+            background: #1e3a8a;
+            border-left-color: #60a5fa;
+        }
+
+        #infoModal .cta-section {
+            background: #fef3c7;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1.5rem;
+            border: 1px solid #fbbf24;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+        .dark #infoModal .cta-section {
+            background: #78350f;
+            border-color: #f59e0b;
+        }
+
+        #infoModal kbd {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 0.25rem;
+            padding: 0.125rem 0.375rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+        }
+
+        .dark #infoModal kbd {
+            background: #374151;
+            border-color: #4b5563;
+        }
+
+        /* Policy content styling */
+        #infoModal .policy-content {
+            font-size: 0.9rem;
+        }
+
+        #infoModal .policy-section {
+            margin-bottom: 1.5rem;
+        }
+
+        #infoModal .update-date {
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        #infoModal .highlight-box {
+            background: #ecfdf5;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid #10b981;
+            font-weight: 500;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+        .dark #infoModal .highlight-box {
+            background: #064e3b;
+            border-left-color: #34d399;
+        }
+
+        #infoModal .note {
+            background: #fef3c7;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+        .dark #infoModal .note {
+            background: #78350f;
+        }
+
+        #infoModal .contact-section {
+            background: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+        .dark #infoModal .contact-section {
+            background: #1f2937;
+        }
+
+        #infoModal a {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+
+        #infoModal a:hover {
+            color: #1d4ed8;
+        }
+
+        .dark #infoModal a {
+            color: #60a5fa;
+        }
+
+        .dark #infoModal a:hover {
+            color: #93c5fd;
+        }
+
+        #infoModal ul {
+            margin: 0.75rem 0;
+            padding-left: 1.5rem;
+            overflow-wrap: break-word;
+        }
+
+        #infoModal ul li {
+            margin: 0.5rem 0;
+            line-height: 1.5;
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
+
+        /* Ensure list text wraps within available space */
+        #infoModal .feature-list,
+        #infoModal .use-cases {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        #infoModal .feature-list li,
+        #infoModal .use-cases li {
+            padding-left: 1.5rem;
+            padding-right: 0.5rem;
+            position: relative;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        /* Prevent any modal content from exceeding container */
+        #infoModal #modalContent,
+        #infoModal #modalContent * {
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Ensure all modal text content wraps properly */
+        #infoModal p,
+        #infoModal div,
+        #infoModal span,
+        #infoModal a,
+        #infoModal strong,
+        #infoModal em {
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+
+        #infoModal code,
+        #infoModal pre {
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-all;
+            white-space: pre-wrap;
+        }
+
+        /* Specific fixes for prose content */
+        #infoModal .prose {
+            max-width: 100%;
+        }
+
+        #infoModal .prose > * {
+            max-width: 100%;
+        }
+
+        /* Custom scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 5px;
+            border: 2px solid #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .dark ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-color: #1e293b;
+        }
+
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        /* Firefox scrollbar */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 #f1f5f9;
+        }
+
+        .dark * {
+            scrollbar-color: #475569 #1e293b;
+        }
+
+        /* Header improvements */
+        header {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark header {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        header h1 {
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: left;
+            border-radius: 6px;
+            padding: 6px 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.7rem;
+            line-height: 1rem;
+            white-space: nowrap;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .dark .tooltip .tooltiptext {
+            background-color: #111;
+        }
+
+        /* Collapsible details styling */
+        details summary {
+            list-style: none;
+        }
+
+        details summary::-webkit-details-marker {
+            display: none;
+        }
+
+        details summary span:first-child {
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+
+        details[open] summary span:first-child {
+            transform: rotate(90deg);
+        }
+
+        /* Better mobile font sizing */
+        @media (max-width: 640px) {
+            input, select {
+                font-size: 16px !important; /* Prevents iOS zoom */
+            }
+        }
+
+        /* Select dropdown styling fixes */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+
+        .dark select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        }
+
+        /* Dropdown option styling */
+        select option {
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        select optgroup {
+            font-weight: 600;
+            font-size: 13px;
+            color: #374151;
+            padding: 4px 0;
+        }
+
+        .dark select optgroup {
+            color: #d1d5db;
+        }
+
+        /* Fix dropdown menu width and positioning */
+        select:focus {
+            outline: none;
+        }
+
+        /* Force dropdown to open downwards */
+        select {
+            position: relative;
+        }
+
+        /* Thin scrollbar for dropdown */
+        select::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        select::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        select::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        select::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .dark select::-webkit-scrollbar-track {
+            background: #2d3748;
+        }
+
+        .dark select::-webkit-scrollbar-thumb {
+            background: #4a5568;
+        }
+
+        .dark select::-webkit-scrollbar-thumb:hover {
+            background: #718096;
+        }
+
+        /* For Firefox */
+        select {
+            scrollbar-width: thin;
+            scrollbar-color: #888 #f1f1f1;
+        }
+
+        .dark select {
+            scrollbar-color: #4a5568 #2d3748;
+        }
+
+        /* Limit dropdown height to show scroll */
+        select {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        /* Ensure dropdown menu opens downward */
+        #timezoneSelect {
+            margin-bottom: 10px;
+        }
+
+        /* Add space after timezone section for dropdown */
+        .timezone-section {
+            padding-bottom: 20px;
+            min-height: 80px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+    <header class="bg-primary-600 text-white shadow-lg py-2 sm:py-2.5">
+        <div class="container mx-auto px-4 sm:px-6 flex justify-between items-center max-w-7xl">
+            <div class="flex items-center gap-2">
+                <span class="text-xl sm:text-2xl">⏱️</span>
+                <h1 class="text-lg sm:text-xl font-bold tracking-tight">TimeConvert.io</h1>
+            </div>
+            <button id="darkModeToggle" class="bg-primary-700 hover:bg-primary-800 text-white px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105 active:scale-95 shadow-md" title="Toggle dark/light mode">
+                <span id="darkModeIcon" class="text-base">🌙</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-3 py-4 flex-grow max-w-7xl">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
+            <!-- Timestamp Converter Section -->
+            <section class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                <h2 class="text-base font-semibold mb-3 pb-2 border-b dark:border-gray-700">Timestamp Converter</h2>
+
+                <div class="space-y-3">
+                    <!-- Input Section -->
+                    <div>
+                        <label for="timestampInput" class="block text-xs font-medium mb-1.5 text-gray-700 dark:text-gray-300">Enter Timestamp</label>
+                        <div class="flex">
+                            <input
+                                type="text"
+                                id="timestampInput"
+                                class="flex-grow px-2.5 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-l-md focus:outline-none focus:ring-1 focus:ring-primary-500 dark:bg-gray-700"
+                                placeholder="e.g., 1760865229 or 2025-10-19"
+                            >
+                            <button
+                                id="nowButtonConverter"
+                                class="bg-primary-500 hover:bg-primary-600 text-white px-3 py-1.5 sm:px-3 sm:py-1.5 rounded-r-md text-xs sm:text-xs font-medium transition-colors whitespace-nowrap"
+                                title="Insert current timestamp"
+                            ><span class="hidden sm:inline">Current Time</span><span class="sm:hidden">Now</span></button>
+                        </div>
+                        <div id="formatHint" class="text-xs text-gray-500 dark:text-gray-400 mt-1 min-h-[16px]"></div>
+                        <div id="converterError" class="text-xs text-red-600 dark:text-red-400 mt-1 hidden bg-red-50 dark:bg-red-900/20 p-2 rounded flex items-start gap-1">
+                            <span class="flex-shrink-0">⚠️</span>
+                            <span id="converterErrorText"></span>
+                        </div>
+                    </div>
+
+                    <!-- Time Outputs -->
+                    <div class="space-y-2.5">
+                        <div>
+                            <label class="block text-xs font-medium mb-1 text-gray-700 dark:text-gray-300">Local Time</label>
+                            <div class="flex">
+                                <input
+                                    type="text"
+                                    id="localTimeOutput"
+                                    class="flex-grow px-2.5 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700 font-mono"
+                                    placeholder="2025-10-20 13:47:30 (GMT+5:30)"
+                                    readonly
+                                >
+                                <button
+                                    data-clipboard-target="#localTimeOutput"
+                                    class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-2.5 py-1.5 rounded-r-md text-xs transition-colors"
+                                >📋</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-1 text-gray-700 dark:text-gray-300">UTC Time</label>
+                            <div class="flex">
+                                <input
+                                    type="text"
+                                    id="utcTimeOutput"
+                                    class="flex-grow px-2.5 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700 font-mono"
+                                    placeholder="2025-10-20 08:17:30"
+                                    readonly
+                                >
+                                <button
+                                    data-clipboard-target="#utcTimeOutput"
+                                    class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-2.5 py-1.5 rounded-r-md text-xs transition-colors"
+                                >📋</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timezone Conversion Section -->
+                    <div class="relative timezone-section">
+                        <label class="block text-xs font-medium mb-1.5 text-gray-700 dark:text-gray-300">
+                            <span class="tooltip">
+                                Custom Timezone
+                                <span class="tooltiptext">Convert to any timezone</span>
+                            </span>
+                        </label>
+                        <div class="space-y-2">
+                            <select
+                                id="timezoneSelect"
+                                class="w-full px-2.5 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-500 dark:bg-gray-700"
+                                size="1"
+                            >
+                                <option value="">Select timezone...</option>
+                                <optgroup label="Common">
+                                    <option value="UTC">UTC</option>
+                                    <option value="America/New_York">EST/EDT (US East)</option>
+                                    <option value="America/Chicago">CST/CDT (US Central)</option>
+                                    <option value="America/Denver">MST/MDT (US Mountain)</option>
+                                    <option value="America/Los_Angeles">PST/PDT (US Pacific)</option>
+                                    <option value="Europe/London">GMT/BST (London)</option>
+                                    <option value="Europe/Paris">CET/CEST (Paris)</option>
+                                    <option value="Asia/Tokyo">JST (Tokyo)</option>
+                                    <option value="Asia/Shanghai">CST (China)</option>
+                                    <option value="Asia/Kolkata">IST (India)</option>
+                                    <option value="Australia/Sydney">AEST (Sydney)</option>
+                                </optgroup>
+                                <optgroup label="Africa">
+                                    <option value="Africa/Cairo">Cairo</option>
+                                    <option value="Africa/Johannesburg">Johannesburg</option>
+                                    <option value="Africa/Lagos">Lagos</option>
+                                </optgroup>
+                                <optgroup label="Americas">
+                                    <option value="America/Anchorage">Anchorage</option>
+                                    <option value="America/Sao_Paulo">São Paulo</option>
+                                    <option value="America/Mexico_City">Mexico City</option>
+                                    <option value="America/Toronto">Toronto</option>
+                                    <option value="America/Vancouver">Vancouver</option>
+                                </optgroup>
+                                <optgroup label="Asia">
+                                    <option value="Asia/Dubai">Dubai</option>
+                                    <option value="Asia/Hong_Kong">Hong Kong</option>
+                                    <option value="Asia/Jerusalem">Jerusalem</option>
+                                    <option value="Asia/Seoul">Seoul</option>
+                                    <option value="Asia/Singapore">Singapore</option>
+                                </optgroup>
+                                <optgroup label="Australia & Pacific">
+                                    <option value="Australia/Melbourne">Melbourne</option>
+                                    <option value="Australia/Perth">Perth</option>
+                                    <option value="Pacific/Auckland">Auckland</option>
+                                </optgroup>
+                                <optgroup label="Europe">
+                                    <option value="Europe/Amsterdam">Amsterdam</option>
+                                    <option value="Europe/Athens">Athens</option>
+                                    <option value="Europe/Berlin">Berlin</option>
+                                    <option value="Europe/Istanbul">Istanbul</option>
+                                    <option value="Europe/Moscow">Moscow</option>
+                                    <option value="Europe/Rome">Rome</option>
+                                    <option value="Europe/Stockholm">Stockholm</option>
+                                </optgroup>
+                            </select>
+                            <div class="flex">
+                                <input
+                                    type="text"
+                                    id="timezoneOutput"
+                                    class="flex-grow px-2.5 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700 font-mono"
+                                    placeholder="Select timezone above"
+                                    readonly
+                                >
+                                <button
+                                    data-clipboard-target="#timezoneOutput"
+                                    class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-2.5 py-1.5 rounded-r-md text-xs transition-colors"
+                                >📋</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Format Outputs - Collapsible on Mobile -->
+                    <details class="group border-t pt-3 dark:border-gray-700" open>
+                        <summary class="cursor-pointer text-xs font-medium mb-2 text-gray-700 dark:text-gray-300 flex items-center select-none">
+                            <span class="mr-1 text-gray-500">▶</span>
+                            <span>Standard Formats</span>
+                        </summary>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+                            <div>
+                                <label class="block text-xs mb-1 text-gray-600 dark:text-gray-400">
+                                    <span class="tooltip">
+                                        UNIX (s)
+                                        <span class="tooltiptext">Seconds since epoch</span>
+                                    </span>
+                                </label>
+                                <div class="flex">
+                                    <input type="text" id="unixSecondsOutput" class="flex-grow px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700 font-mono" placeholder="1760948089" readonly>
+                                    <button data-clipboard-target="#unixSecondsOutput" class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-2 py-1 rounded-r-md text-xs transition-colors">📋</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs mb-1 text-gray-600 dark:text-gray-400">
+                                    <span class="tooltip">
+                                        UNIX (ms)
+                                        <span class="tooltiptext">Milliseconds since epoch</span>
+                                    </span>
+                                </label>
+                                <div class="flex">
+                                    <input type="text" id="unixMillisOutput" class="flex-grow px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700 font-mono" placeholder="1760948089360" readonly>
+                                    <button data-clipboard-target="#unixMillisOutput" class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-2 py-1 rounded-r-md text-xs transition-colors">📋</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs mb-1 text-gray-600 dark:text-gray-400">
+                                    <span class="tooltip">
+                                        ISO 8601
+                                        <span class="tooltiptext">Standard API format</span>
+                                    </span>
+                                </label>
+                                <div class="flex">
+                                    <input type="text" id="isoOutput" class="flex-grow px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700 font-mono" placeholder="2025-10-20T08:09:08.360Z" readonly>
+                                    <button data-clipboard-target="#isoOutput" class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-2 py-1 rounded-r-md text-xs transition-colors">📋</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs mb-1 text-gray-600 dark:text-gray-400">
+                                    <span class="tooltip">
+                                        RFC 2822
+                                        <span class="tooltiptext">Email date format</span>
+                                    </span>
+                                </label>
+                                <div class="flex">
+                                    <input type="text" id="rfcOutput" class="flex-grow px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700 font-mono" placeholder="Mon, 20 Oct 2025 08:09:08 GMT" readonly>
+                                    <button data-clipboard-target="#rfcOutput" class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-2 py-1 rounded-r-md text-xs transition-colors">📋</button>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+
+                    <!-- DB Timestamp Format Helpers - Collapsible -->
+                    <details class="group border-t pt-3 dark:border-gray-700">
+                        <summary class="cursor-pointer text-xs font-medium mb-2 text-gray-700 dark:text-gray-300 flex items-center select-none">
+                            <span class="mr-1 text-gray-500">▶</span>
+                            <span>Database Formats</span>
+                        </summary>
+                        <div class="grid grid-cols-1 gap-2 mt-2">
+                            <div>
+                                <label class="block text-xs mb-1 text-gray-600 dark:text-gray-400">
+                                    <span class="tooltip">
+                                        MySQL
+                                        <span class="tooltiptext">DATETIME format</span>
+                                    </span>
+                                </label>
+                                <div class="flex">
+                                    <input type="text" id="mysqlOutput" class="flex-grow px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700 font-mono overflow-x-auto" placeholder="2025-10-20 08:09:08" readonly>
+                                    <button data-clipboard-target="#mysqlOutput" class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-2 py-1 rounded-r-md text-xs transition-colors flex-shrink-0">📋</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs mb-1 text-gray-600 dark:text-gray-400">
+                                    <span class="tooltip">
+                                        PostgreSQL
+                                        <span class="tooltiptext">Timestamp with TZ</span>
+                                    </span>
+                                </label>
+                                <div class="flex">
+                                    <input type="text" id="postgresOutput" class="flex-grow px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700 font-mono overflow-x-auto" placeholder="2025-10-20 08:09:08.360+00" readonly>
+                                    <button data-clipboard-target="#postgresOutput" class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-2 py-1 rounded-r-md text-xs transition-colors flex-shrink-0">📋</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs mb-1 text-gray-600 dark:text-gray-400">
+                                    <span class="tooltip">
+                                        MongoDB
+                                        <span class="tooltiptext">ISODate format</span>
+                                    </span>
+                                </label>
+                                <div class="flex">
+                                    <input type="text" id="mongoOutput" class="flex-grow px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700 font-mono overflow-x-auto" placeholder='ISODate("2025-10-20T08:09:08.360Z")' readonly>
+                                    <button data-clipboard-target="#mongoOutput" class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-2 py-1 rounded-r-md text-xs transition-colors flex-shrink-0">📋</button>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <!-- Time Difference Calculator Section -->
+            <section class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+                <h2 class="text-base font-semibold mb-3 pb-2 border-b dark:border-gray-700">Time Difference Calculator</h2>
+
+                <div class="space-y-3">
+                    <div>
+                        <label for="timestamp1" class="block text-xs font-medium mb-1.5 text-gray-700 dark:text-gray-300">First Timestamp</label>
+                        <div class="flex">
+                            <input
+                                type="text"
+                                id="timestamp1"
+                                class="flex-grow px-2.5 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-l-md focus:outline-none focus:ring-1 focus:ring-primary-500 dark:bg-gray-700"
+                                placeholder="e.g., 1760865229"
+                            >
+                            <button
+                                id="nowButton1"
+                                class="bg-primary-500 hover:bg-primary-600 text-white px-3 py-1.5 sm:px-3 sm:py-1.5 rounded-r-md text-xs sm:text-xs font-medium transition-colors whitespace-nowrap"
+                                title="Insert current timestamp"
+                            ><span class="hidden sm:inline">Current Time</span><span class="sm:hidden">Now</span></button>
+                        </div>
+                        <div id="timestamp1Error" class="text-xs text-red-600 dark:text-red-400 mt-1 hidden"></div>
+                    </div>
+
+                    <div>
+                        <label for="timestamp2" class="block text-xs font-medium mb-1.5 text-gray-700 dark:text-gray-300">Second Timestamp</label>
+                        <div class="flex">
+                            <input
+                                type="text"
+                                id="timestamp2"
+                                class="flex-grow px-2.5 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-l-md focus:outline-none focus:ring-1 focus:ring-primary-500 dark:bg-gray-700"
+                                placeholder="e.g., 1760865229"
+                            >
+                            <button
+                                id="nowButton2"
+                                class="bg-primary-500 hover:bg-primary-600 text-white px-3 py-1.5 sm:px-3 sm:py-1.5 rounded-r-md text-xs sm:text-xs font-medium transition-colors whitespace-nowrap"
+                                title="Insert current timestamp"
+                            ><span class="hidden sm:inline">Current Time</span><span class="sm:hidden">Now</span></button>
+                        </div>
+                        <div id="timestamp2Error" class="text-xs text-red-600 dark:text-red-400 mt-1 hidden"></div>
+                    </div>
+
+                    <div id="calculatorError" class="text-xs text-red-600 dark:text-red-400 hidden bg-red-50 dark:bg-red-900/20 p-2 rounded flex items-start gap-1">
+                        <span class="flex-shrink-0">⚠️</span>
+                        <span id="calculatorErrorText"></span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div>
+                            <label class="block text-xs font-medium mb-1 text-gray-700 dark:text-gray-300">Time Difference (hh:mm:ss)</label>
+                            <div class="flex">
+                                <input
+                                    type="text"
+                                    id="timeDiffHMS"
+                                    class="flex-grow px-2.5 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700 font-mono"
+                                    placeholder="00:00:00"
+                                    readonly
+                                >
+                                <button
+                                    data-clipboard-target="#timeDiffHMS"
+                                    class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-2.5 py-1.5 rounded-r-md text-xs transition-colors"
+                                >📋</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium mb-1 text-gray-700 dark:text-gray-300">Detailed Format</label>
+                            <div class="flex">
+                                <input
+                                    type="text"
+                                    id="timeDiffDHMS"
+                                    class="flex-grow px-2.5 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-l-md bg-gray-50 dark:bg-gray-700 font-mono"
+                                    placeholder="0d 0h 0m 0s"
+                                    readonly
+                                >
+                                <button
+                                    data-clipboard-target="#timeDiffDHMS"
+                                    class="copy-btn bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 px-2.5 py-1.5 rounded-r-md text-xs transition-colors"
+                                >📋</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium mb-1 text-gray-700 dark:text-gray-300">Human-Readable</label>
+                        <input
+                            type="text"
+                            id="timeDiffHuman"
+                            class="w-full px-2.5 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700"
+                            placeholder="Enter timestamps to calculate difference"
+                            readonly
+                        >
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- AdSense Ad Unit - TEMPORARILY COMMENTED OUT -->
+        <!-- <div class="mt-6 flex justify-center">
+            <div class="w-full max-w-2xl px-4">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-7149099440353877"
+                     data-ad-slot="YOUR_AD_SLOT_ID_HERE"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div> -->
+
+        <!-- FAQ Section for SEO - Collapsible on mobile -->
+        <section class="mt-6 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+            <h2 class="text-base font-semibold mb-3 pb-2 border-b dark:border-gray-700">Frequently Asked Questions</h2>
+
+            <div class="space-y-3">
+                <details class="group">
+                    <summary class="cursor-pointer font-medium text-sm flex items-center">
+                        <span class="mr-2 text-gray-500">▶</span>
+                        <span>What is a UNIX timestamp?</span>
+                    </summary>
+                    <p class="text-xs text-gray-600 dark:text-gray-300 mt-2 ml-6">A UNIX timestamp (or epoch time) represents the number of seconds since January 1, 1970 (UTC). It's widely used in databases and programming languages.</p>
+                </details>
+
+                <details class="group">
+                    <summary class="cursor-pointer font-medium text-sm flex items-center">
+                        <span class="mr-2 text-gray-500">▶</span>
+                        <span>How do I convert a database timestamp?</span>
+                    </summary>
+                    <p class="text-xs text-gray-600 dark:text-gray-300 mt-2 ml-6">Simply paste your timestamp into the "Enter Timestamp" field. Our tool auto-detects the format and shows you the converted time in both local and UTC timezones.</p>
+                </details>
+
+                <details class="group">
+                    <summary class="cursor-pointer font-medium text-sm flex items-center">
+                        <span class="mr-2 text-gray-500">▶</span>
+                        <span>Why are timestamps useful for developers?</span>
+                    </summary>
+                    <p class="text-xs text-gray-600 dark:text-gray-300 mt-2 ml-6">Timestamps provide precise event timing. When debugging or verifying data, converting timestamps to human-readable formats helps teams understand when events occurred.</p>
+                </details>
+
+                <details class="group">
+                    <summary class="cursor-pointer font-medium text-sm flex items-center">
+                        <span class="mr-2 text-gray-500">▶</span>
+                        <span>What's the difference between seconds and milliseconds?</span>
+                    </summary>
+                    <p class="text-xs text-gray-600 dark:text-gray-300 mt-2 ml-6">UNIX seconds (10 digits) are used by most databases, while milliseconds (13 digits) provide 1000x more precision and are common in JavaScript (Date.now()).</p>
+                </details>
+
+                <details class="group">
+                    <summary class="cursor-pointer font-medium text-sm flex items-center">
+                        <span class="mr-2 text-gray-500">▶</span>
+                        <span>How do databases store timestamps?</span>
+                    </summary>
+                    <p class="text-xs text-gray-600 dark:text-gray-300 mt-2 ml-6">MySQL uses DATETIME (YYYY-MM-DD HH:MM:SS), PostgreSQL uses timestamp with timezone, and MongoDB uses ISODate objects. Our tool converts between all these formats.</p>
+                </details>
+            </div>
+        </section>
+
+        <!-- Recent Conversions -->
+        <section class="mt-6 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+            <div class="flex justify-between items-center mb-3 pb-2 border-b dark:border-gray-700">
+                <h2 class="text-base font-semibold">Recent Conversions</h2>
+                <div class="flex gap-2">
+                    <a href="https://github.com/timeconvertio/timeconvert/issues/new" target="_blank" class="text-xs px-2 py-1 bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-200 rounded hover:bg-primary-200 dark:hover:bg-primary-800 transition-colors">Report Issue</a>
+                    <button id="clearHistory" class="text-xs px-2 py-1 bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-200 rounded hover:bg-red-200 dark:hover:bg-red-800 transition-colors">Clear</button>
+                </div>
+            </div>
+            <div id="recentConversions" class="space-y-2 max-h-32 overflow-y-auto">
+                <div class="text-xs text-gray-500 dark:text-gray-400 italic tooltip">
+                    No recent conversions yet
+                    <span class="tooltiptext">Your conversions will appear here</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 py-3 border-t dark:border-gray-700">
+        <div class="container mx-auto px-3 sm:px-4 flex flex-col sm:flex-row justify-between items-center text-xs max-w-7xl gap-2">
+            <div>&copy; 2025 TimeConvert.io</div>
+            <div class="flex gap-3 items-center">
+                <a href="#about" class="hover:text-primary-600 dark:hover:text-primary-400" id="aboutLink">About</a>
+                <a href="#privacy" class="hover:text-primary-600 dark:hover:text-primary-400" id="privacyLink">Privacy</a>
+                <a href="#terms" class="hover:text-primary-600 dark:hover:text-primary-400" id="termsLink">Terms</a>
+                
+                <!-- <a href="https://github.com/monis01/TimeConvert/issues" target="_blank" class="hover:text-primary-600 dark:hover:text-primary-400" id="termsLink">Report an Issue</a> -->
+                
+                <!-- temporary closing it -->
+                <!-- <button id="buyMeCoffeeBtn" class="flex items-center gap-1 px-2 py-1 bg-yellow-400 hover:bg-yellow-500 text-gray-900 rounded-md transition-colors duration-200" title="Support us">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                        <path d="M2 5h20v2h-1v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7H2V5zm3 2v13h14V7H5zm2 2h10v2H7V9z"/>
+                    </svg>
+                    <span class="font-medium">Buy Me a Coffee</span>
+                </button> -->
+            </div>
+        </div>
+
+        <!-- OLD MODAL - COMMENTED OUT
+        <div id="infoModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden overflow-y-auto">
+            <div class="min-h-full p-3 sm:p-4 sm:flex sm:items-center sm:justify-center">
+                <div class="bg-white dark:bg-gray-800 rounded-lg w-full max-w-full sm:max-w-2xl max-h-[95vh] sm:max-h-[80vh] overflow-hidden shadow-xl flex flex-col mt-4 sm:mt-0">
+                    <div class="flex justify-between items-center px-3 sm:px-6 pt-3 sm:pt-6 pb-2 sm:pb-3 border-b dark:border-gray-700 bg-white dark:bg-gray-800 flex-shrink-0">
+                        <h3 id="modalTitle" class="text-sm sm:text-base font-semibold break-words flex-1 mr-2"></h3>
+                        <button id="closeModal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-xl sm:text-2xl flex-shrink-0 px-2">
+                            &times;
+                        </button>
+                    </div>
+                    <div class="overflow-y-auto overflow-x-hidden px-3 sm:px-6 pb-3 sm:pb-6 flex-1">
+                        <div id="modalContent" class="prose dark:prose-invert prose-sm max-w-none text-xs sm:text-sm overflow-x-hidden break-words pt-3 sm:pt-4 w-full"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        -->
+
+        <!-- NEW SIMPLE MODAL -->
+        <div id="infoModal" class="hidden fixed inset-0 z-50 bg-black bg-opacity-50">
+            <!-- Modal Container -->
+            <div class="h-full overflow-y-auto p-4" id="modalBackdrop">
+                <!-- Modal Box -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-2xl max-w-2xl mx-auto my-8" id="modalBox">
+
+                    <!-- Modal Header -->
+                    <div class="flex items-center justify-between p-4 border-b dark:border-gray-700">
+                        <h3 id="modalTitle" class="text-lg font-semibold text-gray-900 dark:text-white flex-1"></h3>
+                        <button id="closeModal" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-2xl font-bold leading-none ml-4 flex-shrink-0">
+                            &times;
+                        </button>
+                    </div>
+
+                    <!-- Modal Body -->
+                    <div class="p-4 overflow-y-auto max-h-[70vh]">
+                        <div id="modalContent" class="prose dark:prose-invert prose-sm max-w-none text-sm"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Buy Me a Coffee Modal -->
+    <div id="buyMeCoffeeModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-4 sm:p-6 relative mx-4">
+            <button id="closeBuyMeCoffeeModal" class="absolute top-2 right-2 sm:top-4 sm:right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 z-10">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:h-7 sm:w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <h2 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-center text-gray-800 dark:text-white pr-8">Support TimeConvert.io</h2>
+            <p class="text-sm sm:text-base text-center text-gray-600 dark:text-gray-300 mb-4 sm:mb-6">If you find this tool helpful, consider buying me a coffee!</p>
+
+            <div class="flex flex-col items-center gap-3 sm:gap-4">
+                <!-- <img id="buyMeCoffeeQR" src="./assets/images/qr-code.png" alt="Buy Me a Coffee QR Code" class="w-48 h-48 sm:w-64 sm:h-64 border-2 border-gray-200 dark:border-gray-700 rounded-lg"> -->
+
+                <a href="https://buymeacoffee.com/monis01" target="_blank" rel="noopener noreferrer"
+                   class="flex items-center justify-center gap-2 px-4 py-3 bg-yellow-400 hover:bg-yellow-500 text-gray-900 rounded-lg transition-colors duration-200 font-semibold text-sm sm:text-base w-full sm:w-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 flex-shrink-0">
+                        <path d="M2 5h20v2h-1v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7H2V5zm3 2v13h14V7H5zm2 2h10v2H7V9z"/>
+                    </svg>
+                    <span class="whitespace-nowrap">Visit buymeacoffee.com/monis01</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google AdSense Script - TEMPORARILY COMMENTED OUT -->
+    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7149099440353877"
+    crossorigin="anonymous"></script> -->
+    <script src="./main.js"></script>
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "u1cmvn6yot");
+    </script>
+</body>
+</html>
